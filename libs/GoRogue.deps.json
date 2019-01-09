@@ -1,0 +1,79 @@
+{
+  "runtimeTarget": {
+    "name": ".NETStandard,Version=v2.0/",
+    "signature": "13ac643f0a6b7a0791e40b7dd53944922f6a19ca"
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETStandard,Version=v2.0": {},
+    ".NETStandard,Version=v2.0/": {
+      "GoRogue/1.0.0": {
+        "dependencies": {
+          "NETStandard.Library": "2.0.3",
+          "OptimizedPriorityQueue": "4.2.0",
+          "Troschuetz.Random": "4.3.0"
+        },
+        "runtime": {
+          "GoRogue.dll": {}
+        }
+      },
+      "Microsoft.NETCore.Platforms/1.1.0": {},
+      "NETStandard.Library/2.0.3": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.1.0"
+        }
+      },
+      "OptimizedPriorityQueue/4.2.0": {
+        "runtime": {
+          "lib/netstandard1.0/Priority Queue.dll": {
+            "assemblyVersion": "4.2.0.0",
+            "fileVersion": "4.2.0.0"
+          }
+        }
+      },
+      "Troschuetz.Random/4.3.0": {
+        "runtime": {
+          "lib/netstandard2.0/Troschuetz.Random.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.3.0.151"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "GoRogue/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.NETCore.Platforms/1.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-bLpT1f/SFlO1CzqXG12KnJzpZs6lv24uX2Rzi4Fmm0noJpNlnWRVryuO3yK18Ca04t/YHcO1e1Z0WDfjseqNzw==",
+      "path": "microsoft.netcore.platforms/1.1.0",
+      "hashPath": "microsoft.netcore.platforms.1.1.0.nupkg.sha512"
+    },
+    "NETStandard.Library/2.0.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-st47PosZSHrjECdjeIzZQbzivYBJFv6P2nv4cj2ypdI204DO+vZ7l5raGMiX4eXMJ53RfOIg+/s4DHVZ54Nu2A==",
+      "path": "netstandard.library/2.0.3",
+      "hashPath": "netstandard.library.2.0.3.nupkg.sha512"
+    },
+    "OptimizedPriorityQueue/4.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-jDxbVsb4HBzuhqIb2Bud/obIpvK92YLNi9lHxKiTU1otk8nP17FzZnj/n+ynh5r2i09LCIBC3yZNXB2QSSHPmQ==",
+      "path": "optimizedpriorityqueue/4.2.0",
+      "hashPath": "optimizedpriorityqueue.4.2.0.nupkg.sha512"
+    },
+    "Troschuetz.Random/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-MwfN3xAyJGGLPyFO0W7cq+jZ7RvSQWs93Jr+QWnLETC/FigyvrBp/NSRs/UpSmkmc03V0tyngppwxbA/3qmgQg==",
+      "path": "troschuetz.random/4.3.0",
+      "hashPath": "troschuetz.random.4.3.0.nupkg.sha512"
+    }
+  }
+}

@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2048
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoRogue_SadConsole", "GoRogue_SadConsole\GoRogue_SadConsole.csproj", "{15B6DD21-48CB-4DF8-967B-C47F84827BC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoRogue_SadConsole", "GoRogue_SadConsole\GoRogue_SadConsole.csproj", "{15B6DD21-48CB-4DF8-967B-C47F84827BC5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test_Game", "Test_Game\Test_Game.csproj", "{D001BF87-1BBB-49B2-BA0B-5986C36E93A1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{15B6DD21-48CB-4DF8-967B-C47F84827BC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15B6DD21-48CB-4DF8-967B-C47F84827BC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15B6DD21-48CB-4DF8-967B-C47F84827BC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D001BF87-1BBB-49B2-BA0B-5986C36E93A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D001BF87-1BBB-49B2-BA0B-5986C36E93A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D001BF87-1BBB-49B2-BA0B-5986C36E93A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D001BF87-1BBB-49B2-BA0B-5986C36E93A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
