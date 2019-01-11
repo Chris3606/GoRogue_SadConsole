@@ -1978,25 +1978,24 @@
             </summary>
             <returns>A (multi-line) string representation of the FOV.</returns>
         </member>
-        <member name="T:GoRogue.GameFramework.GameObject`1">
+        <member name="T:GoRogue.GameFramework.GameObject">
             <summary>
-            Base class for any object that has a grid position and can be added to a Map.  BaseSubclass must be the
-            type that is deriving from this types, eg. class MyDerivingGameObject : GameObject&lt;MyDerivingGameObject&gt;
+            Base class for any object that has a grid position and can be added to a Map.  Implements basic attributes generally common to all objects
+            on a map, as well as properties/methods that the Map class needs to function.
             </summary>
             <remarks>
-            This class is designed to serve as a base class for your own game objects in your game.  It implements
-            basic common functionality such as walkability and transparency, and provides some infrastructure
-            that allows it to be added to instances of Map&lt;GameObject&lt;BaseSubclass&gt;&gt;.  It also implements
-            the necessary functionality that allows GameObjects to be added to an ISpatialMap implementation.
+            This class is designed to serve as a base class for your own game objects in your game.  It implements basic common functionality such as
+            walkability and transparency, and provides some infrastructure that allows it to be added to instances of Map.  It also implements the
+            necessary functionality that allows GameObjects to be added to an ISpatialMap implementation.
             
-            It is intended that you create a class (say, MyGameObject), that derives from this one (GameObject&lt;MyGameObject&gt;),
-            and use this as the base class for your game's objects.  This way, a Map&lt;MyGameObject&gt; class will return
-            its objects as type MyGameObject, meaning you can implement any common, game-specific functionality you need 
-            and have easy access to that information when objects are retrieved from the map.
+            Generally, you would create one or more classes (say, MyGameObject or MyTerrain), that derives from this one (GameObject), and use that as
+            the base class for your game's objects.  A Map instance can be used to store these objects efficiently. As well, Map provides functionality
+            that will allow you to retrieve your objects as references of their derived type (MyGameObject or MyTerrain, in the example above), meaning
+            you can implement any common, game-specific functionality you need and have easy access to that information when objects are retrieved from
+            the map.
             </remarks>
-            <typeparam name="BaseSubclass">Type of the class that is deriving from this one.</typeparam>
         </member>
-        <member name="P:GoRogue.GameFramework.GameObject`1.Position">
+        <member name="P:GoRogue.GameFramework.GameObject.Position">
             <summary>
             The position of this object on the grid. Any time this value is changed, the Moved event is fired.
             </summary>
@@ -2005,50 +2004,50 @@
             that you call the base set in the overridden setter, as it performs collision detection.
             </remarks>
         </member>
-        <member name="E:GoRogue.GameFramework.GameObject`1.Moved">
+        <member name="E:GoRogue.GameFramework.GameObject.Moved">
             <summary>
             Event fired whenever this object's grid position is successfully changed.  Fired regardless of whether
             the object is part of a Map.
             </summary>
         </member>
-        <member name="P:GoRogue.GameFramework.GameObject`1.IsWalkable">
+        <member name="P:GoRogue.GameFramework.GameObject.IsWalkable">
             <summary>
             Whether or not the object is to be considered "walkable", eg. whether or not the square it resides
             on can be traversed by other, non-walkable objects on the same map.  Effectively, whether or not this
             object collides according to the collision layer.
             </summary>
         </member>
-        <member name="P:GoRogue.GameFramework.GameObject`1.IsTransparent">
+        <member name="P:GoRogue.GameFramework.GameObject.IsTransparent">
             <summary>
             Whether or not the object is considered "transparent", eg. whether or not light passes through it
             for the sake of a Map's FOV.
             </summary>
         </member>
-        <member name="P:GoRogue.GameFramework.GameObject`1.IsStatic">
+        <member name="P:GoRogue.GameFramework.GameObject.IsStatic">
             <summary>
             Whether or not the object is "static".  Static objects CANNOT be moved, and only static objects may
             be placed on a Map's layer 0.
             </summary>
         </member>
-        <member name="P:GoRogue.GameFramework.GameObject`1.ID">
+        <member name="P:GoRogue.GameFramework.GameObject.ID">
             <summary>
             ID of the object.  Used for the sake of putting instances of this class in ISpatialMap implementations,
             and is NOT guaranteed to be entirely unique, though this can be modified by overriding the GenerateID
             function.
             </summary>
         </member>
-        <member name="P:GoRogue.GameFramework.GameObject`1.Layer">
+        <member name="P:GoRogue.GameFramework.GameObject.Layer">
             <summary>
             Layer of a Map that this object can reside on.
             </summary>
         </member>
-        <member name="P:GoRogue.GameFramework.GameObject`1.CurrentMap">
+        <member name="P:GoRogue.GameFramework.GameObject.CurrentMap">
             <summary>
             The current Map which this object resides on.  Null if the object has not been assigned an object.
             A GameObject is allowed to reside on only one map.
             </summary>
         </member>
-        <member name="M:GoRogue.GameFramework.GameObject`1.#ctor(GoRogue.Coord,System.Int32,System.Boolean,System.Boolean,System.Boolean)">
+        <member name="M:GoRogue.GameFramework.GameObject.#ctor(GoRogue.Coord,System.Int32,System.Boolean,System.Boolean,System.Boolean)">
             <summary>
             Constructor.
             </summary>
@@ -2061,7 +2060,7 @@
             <param name="isTransparent">Whether or not the object is considered "transparent", eg. whether or not light passes through it
             for the sake of a Map's FOV.</param>
         </member>
-        <member name="M:GoRogue.GameFramework.GameObject`1.MoveIn(GoRogue.Direction)">
+        <member name="M:GoRogue.GameFramework.GameObject.MoveIn(GoRogue.Direction)">
             <summary>
             Attempts to move the object in the given direction, and returns true if the objec was successfully
             moved, false otherwise.
@@ -2069,7 +2068,7 @@
             <param name="direction">The direction in which to try to move the object.</param>
             <returns>True if the object was successfully moved, false otherwise.</returns>
         </member>
-        <member name="M:GoRogue.GameFramework.GameObject`1.GenerateID">
+        <member name="M:GoRogue.GameFramework.GameObject.GenerateID">
             <summary>
             Function used at construction to assign an ID to the object.  
             </summary>
@@ -2081,18 +2080,18 @@
             </remarks>
             <returns>An ID to assign to the current object.</returns>
         </member>
-        <member name="T:GoRogue.GameFramework.Map`1">
+        <member name="T:GoRogue.GameFramework.Map">
             <summary>
-            Base class for a map that consists of one or more objects of type BaseObject.  It implements basic functionality to manage these objects, as well as
-            commonly needed functinonality like tile exploration, FOV, and pathfinding.  BaseObject must be a type that derives from
-            GameObject&lt;BaseObject&gt;.
+            Base class for a map that consists of one or more objects of base type GameObject.  It implements basic functionality to manage and access these objects, as well as
+            commonly needed functinonality like tile exploration, FOV, and pathfinding.  It also provides methods to easily access these objects as instances of some derived
+            type, that can be used to access functionality you've implemented in a subclass.
             </summary>
             <remarks>
-            A Map consists of BaseObjects on one or more layers.  These layers are numbered, from the lowest layer of 0 upward.  Each Map contains at minimum a
+            A Map consists of GameObjects on one or more layers.  These layers are numbered, from the lowest layer of 0 upward.  Each Map contains at minimum a
             "terrain" layer.  This is considered to be layer 0.  All objects added to this layer must have their IsStatic flag set to true, and must reside
             on layer 0.
             
-            A map will typically also have some other layers, for non terrain objects like the player, monsters, items, etc.  The number of these layers present
+            A map will typically also have some other layers, for non terrain objects like monsters, items, etc.  The number of these layers present
             on the map, along with which of all the layers participate in collision detection, etc., can be specified in the constructor.
             
             While this class has some flexibility, it does, unlike the rest of the library, tend to impose itself on your architecture.  In cases where this is
@@ -2100,101 +2099,100 @@
             all exist as their own (more flexible) components).  This class is not intended to cover every possible use case, but instead may act as an example or starting
             point in the case where you would like to use the components in a different way or within a different architecture.
             </remarks>
-            <typeparam name="BaseObject">The class deriving from GameObject that this map will hold.</typeparam>
         </member>
-        <member name="P:GoRogue.GameFramework.Map`1.Terrain">
+        <member name="P:GoRogue.GameFramework.Map.Terrain">
             <summary>
             Terrain of the map.  Terrain at each location may be set via the SetTerrain function.
             </summary>
         </member>
-        <member name="F:GoRogue.GameFramework.Map`1.Explored">
+        <member name="F:GoRogue.GameFramework.Map.Explored">
             <summary>
             Whether or not each tile is considered explored.  Tiles start off unexplored, and become explored as soon as they are within
             a calculated FOV.  This ArrayMap may also have values set to it, to easily allow for serialization or wizard-mode like functionality.
             </summary>
         </member>
-        <member name="P:GoRogue.GameFramework.Map`1.Entities">
+        <member name="P:GoRogue.GameFramework.Map.Entities">
             <summary>
             IReadOnlyLayeredSpatialMap of all entities (non-terrain objects) on the map.
             </summary>
         </member>
-        <member name="P:GoRogue.GameFramework.Map`1.LayerMasker">
+        <member name="P:GoRogue.GameFramework.Map.LayerMasker">
             <summary>
             LayerMasker that should be used to create layer masks for this Map.
             </summary>
         </member>
-        <member name="P:GoRogue.GameFramework.Map`1.LayersBlockingWalkability">
+        <member name="P:GoRogue.GameFramework.Map.LayersBlockingWalkability">
             <summary>
             Layer mask that contains only layers that block walkability.  A non-walkable BaseObject can only be added to this map if the layer it is on is contained
             within this layer mask.
             </summary>
         </member>
-        <member name="P:GoRogue.GameFramework.Map`1.LayersBlockingTransparency">
+        <member name="P:GoRogue.GameFramework.Map.LayersBlockingTransparency">
             <summary>
             Layer mask that contains only layers that block transparency.  A non-transparent BaseObject can only be added to this map if the layer it is on is contained
             within this layer mask.
             </summary>
         </member>
-        <member name="P:GoRogue.GameFramework.Map`1.TransparencyView">
+        <member name="P:GoRogue.GameFramework.Map.TransparencyView">
             <summary>
             IMapView representing transparency values for each tile.  Each location is true if the location is transparent (there are no non-transparent objects
             at that location), false otherwise.
             </summary>
         </member>
-        <member name="P:GoRogue.GameFramework.Map`1.WalkabilityView">
+        <member name="P:GoRogue.GameFramework.Map.WalkabilityView">
             <summary>
             IMapView representing walkability values for each tile.  Each location is true if the location is walkable (there are no non-walkable objects
             at that location), false otherwise.
             </summary>
         </member>
-        <member name="P:GoRogue.GameFramework.Map`1.FOV">
+        <member name="P:GoRogue.GameFramework.Map.FOV">
             <summary>
             Current FOV results for the map.  Calculate FOV via the Map's CalculateFOV functions.
             </summary>
         </member>
-        <member name="P:GoRogue.GameFramework.Map`1.AStar">
+        <member name="P:GoRogue.GameFramework.Map.AStar">
             <summary>
             AStar pathfinder for the map.  Uses WalkabilityView to determine which locations can be reached.
             </summary>
         </member>
-        <member name="P:GoRogue.GameFramework.Map`1.DistanceMeasurement">
+        <member name="P:GoRogue.GameFramework.Map.DistanceMeasurement">
             <summary>
             Distance measurement used for pathing and measuring distance on the map.
             </summary>
         </member>
-        <member name="E:GoRogue.GameFramework.Map`1.ObjectAdded">
+        <member name="E:GoRogue.GameFramework.Map.ObjectAdded">
             <summary>
             Event that is fired whenever some object is added to the map.
             </summary>
         </member>
-        <member name="E:GoRogue.GameFramework.Map`1.ObjectRemoved">
+        <member name="E:GoRogue.GameFramework.Map.ObjectRemoved">
             <summary>
             Event that is fired whenever some object is removed from the map.
             </summary>
         </member>
-        <member name="E:GoRogue.GameFramework.Map`1.ObjectMoved">
+        <member name="E:GoRogue.GameFramework.Map.ObjectMoved">
             <summary>
             Event that is fired whenever some object that is part of the map is successfully moved.
             </summary>
         </member>
-        <member name="P:GoRogue.GameFramework.Map`1.Height">
+        <member name="P:GoRogue.GameFramework.Map.Height">
             <summary>
             Height of the map, in grid spaces.
             </summary>
         </member>
-        <member name="P:GoRogue.GameFramework.Map`1.Width">
+        <member name="P:GoRogue.GameFramework.Map.Width">
             <summary>
             Width of the map, in grid spaces.
             </summary>
         </member>
-        <member name="P:GoRogue.GameFramework.Map`1.Item(GoRogue.Coord)">
+        <member name="P:GoRogue.GameFramework.Map.Item(GoRogue.Coord)">
             <summary>
             Gets all objects at the given location, from the highest layer (layer with the highest number) down.
             </summary>
             <param name="pos">The position to retrieve objects for.</param>
             <returns>All objects at the given location, in order from highest layer to lowest layer.</returns>
         </member>
-        <member name="P:GoRogue.GameFramework.Map`1.Item(System.Int32,System.Int32)">
+        <member name="P:GoRogue.GameFramework.Map.Item(System.Int32,System.Int32)">
             <summary>
             Gets all objects at the given location, from the highest layer (layer with the highest number) down.
             </summary>
@@ -2202,7 +2200,7 @@
             <param name="y">Y-value of the position to retrieve objects for.</param>
             <returns>All objects at the given location, in order from highest layer to lowest layer.</returns>
         </member>
-        <member name="M:GoRogue.GameFramework.Map`1.#ctor(System.Int32,System.Int32,System.Int32,GoRogue.Distance,System.UInt32,System.UInt32,System.UInt32)">
+        <member name="M:GoRogue.GameFramework.Map.#ctor(System.Int32,System.Int32,System.Int32,GoRogue.Distance,System.UInt32,System.UInt32,System.UInt32)">
             <summary>
             Constructor.  Constructs terrain map as ArrayMap&lt;BaseObject&gt; with the given width/height.
             </summary>
@@ -2217,7 +2215,7 @@
             <param name="entityLayersSupportingMultipleItems">Layer mask containing those layers that should be allowed to have multiple objects at the same
             location on the same layer.  Defaults to no layers.</param>
         </member>
-        <member name="M:GoRogue.GameFramework.Map`1.#ctor(GoRogue.MapViews.ISettableMapView{`0},System.Int32,GoRogue.Distance,System.UInt32,System.UInt32,System.UInt32)">
+        <member name="M:GoRogue.GameFramework.Map.#ctor(GoRogue.MapViews.ISettableMapView{GoRogue.GameFramework.GameObject},System.Int32,GoRogue.Distance,System.UInt32,System.UInt32,System.UInt32)">
             <summary>
             Constructor.  Constructs map with the given terrain layer, determining width/height based on the width/height of that terrain layer.
             </summary>
@@ -2232,14 +2230,23 @@
             <param name="entityLayersSupportingMultipleItems">Layer mask containing those layers that should be allowed to have multiple objects at the same
             location on the same layer.  Defaults to no layers.</param>
         </member>
-        <member name="M:GoRogue.GameFramework.Map`1.GetTerrain(GoRogue.Coord)">
+        <member name="M:GoRogue.GameFramework.Map.GetTerrain(GoRogue.Coord)">
             <summary>
             Gets the terrain object at the given location, or null if no terrain is set to that location.
             </summary>
             <param name="position">The position to get the terrain for.</param>
             <returns>The terrain at the given postion, or null if no terrain exists at that location.</returns>
         </member>
-        <member name="M:GoRogue.GameFramework.Map`1.GetTerrain(System.Int32,System.Int32)">
+        <member name="M:GoRogue.GameFramework.Map.GetTerrain``1(GoRogue.Coord)">
+            <summary>
+            Gets the terrain object at the given location, as a value of type TerrainType.  Returns null if no terrain is set, or the terrain
+            cannot be casted to the type specified.
+            </summary>
+            <typeparam name="TerrainType">Type to return the terrain as.</typeparam>
+            <param name="position">The position to get the terrain for.</param>
+            <returns>The terrain at the given postion, or null if either no terrain exists at that location or the terrain was not castable to type TerrainType.</returns>
+        </member>
+        <member name="M:GoRogue.GameFramework.Map.GetTerrain(System.Int32,System.Int32)">
             <summary>
             Gets the terrain object at the given location, or null if no terrain is set to that location.
             </summary>
@@ -2247,28 +2254,38 @@
             <param name="y">Y-value of the position to get the terrain for.</param>
             <returns>The terrain at the given postion, or null if no terrain exists at that location.</returns>
         </member>
-        <member name="M:GoRogue.GameFramework.Map`1.SetTerrain(`0)">
+        <member name="M:GoRogue.GameFramework.Map.GetTerrain``1(System.Int32,System.Int32)">
+            <summary>
+            Gets the terrain object at the given location, as a value of type TerrainType.  Returns null if no terrain is set, or the terrain
+            cannot be casted to the type specified.
+            </summary>
+            <typeparam name="TerrainType">Type to return the terrain as.</typeparam>
+            <param name="x">X-value of the position to get the terrain for.</param>
+            <param name="y">Y-value of the position to get the terrain for.</param>
+            <returns>The terrain at the given postion, or null if either no terrain exists at that location or the terrain was not castable to type TerrainType.</returns>
+        </member>
+        <member name="M:GoRogue.GameFramework.Map.SetTerrain(GoRogue.GameFramework.GameObject)">
             <summary>
             Sets the terrain at the given objects location to the given object, overwriting any terrain already present there.
             </summary>
             <param name="terrain">Terrain to replace the current terrain with.</param>
         </member>
-        <member name="M:GoRogue.GameFramework.Map`1.AddEntity(`0)">
+        <member name="M:GoRogue.GameFramework.Map.AddEntity(GoRogue.GameFramework.GameObject)">
             <summary>
-            Adds the given entity to its recorded location, removing it from the map it is currently a part of.  Returns true if the entity was added, 
+            Adds the given entity (non-terrain object) to its recorded location, removing it from the map it is currently a part of.  Returns true if the entity was added, 
             false otherwise (eg., collision detection would not allow it, etc.)
             </summary>
             <param name="entity">Entity to add.</param>
             <returns>True if the entity was successfully added to the map, false otherwise.</returns>
         </member>
-        <member name="M:GoRogue.GameFramework.Map`1.RemoveEntity(`0)">
+        <member name="M:GoRogue.GameFramework.Map.RemoveEntity(GoRogue.GameFramework.GameObject)">
             <summary>
-            Removes the given entity from the map, returning true if it was successfully removed, false otherwise.
+            Removes the given entity (non-terrain object) from the map, returning true if it was successfully removed, false otherwise.
             </summary>
             <param name="entity">The entity to remove from the map.</param>
             <returns>True if the entity was removed successfully, false otherwise (eg, the entity was not part of this map).</returns>
         </member>
-        <member name="M:GoRogue.GameFramework.Map`1.GetObject(GoRogue.Coord,System.UInt32)">
+        <member name="M:GoRogue.GameFramework.Map.GetObject(GoRogue.Coord,System.UInt32)">
             <summary>
             Gets the first object encountered at the given position, moving from the highest existing layer in the layer mask downward.  Layer mask defaults to all
             layers.
@@ -2277,17 +2294,43 @@
             <param name="layerMask">Layer mask for which layers can return an object.  Defaults to all layers.</param>
             <returns>The first object encountered, moving from the highest existing layer in the layer mask downward.</returns>
         </member>
-        <member name="M:GoRogue.GameFramework.Map`1.GetObject(System.Int32,System.Int32,System.UInt32)">
+        <member name="M:GoRogue.GameFramework.Map.GetObject``1(GoRogue.Coord,System.UInt32)">
             <summary>
-            Gets the first object encountered at the given position, moving from the highest existing layer in the layer mask downward.  Layer mask defaults to all
-            layers.
+            Gets the first object encountered at the given position that can be casted to the type specified, moving from the highest existing layer in the
+            layer mask downward. Layer mask defaults to all layers.  Null is returned if no objects of the specified type are found, or if there are no objects at the
+            location.
+            </summary>
+            <typeparam name="ObjectType">Type of objects to return.</typeparam>
+            <param name="position">Position to get object for.</param>
+            <param name="layerMask">Layer mask for which layers can return an object.  Defaults to all layers.</param>
+            <returns>The first object encountered, moving from the highest existing layer in the layer mask downward, or null if there are no objects of the specified
+            type are found.</returns>
+        </member>
+        <member name="M:GoRogue.GameFramework.Map.GetObject(System.Int32,System.Int32,System.UInt32)">
+            <summary>
+            Gets the first object encountered at the given position that can be casted to the specified type, moving from the highest existing layer in the layer mask
+            downward. Layer mask defaults to all layers. Null is returned if no objects of the specified type are found, or if there are no objects at the
+            location.
             </summary>
             <param name="x">X-value of the position to get object for.</param>
             <param name="y">Y-value of the position to get object for.</param>
             <param name="layerMask">Layer mask for which layers can return an object.  Defaults to all layers.</param>
             <returns>The first object encountered, moving from the highest existing layer in the layer mask downward.</returns>
         </member>
-        <member name="M:GoRogue.GameFramework.Map`1.GetObjects(GoRogue.Coord,System.UInt32)">
+        <member name="M:GoRogue.GameFramework.Map.GetObject``1(System.Int32,System.Int32,System.UInt32)">
+            <summary>
+            Gets the first object encountered at the given position that can be casted to the specified type, moving from the highest existing layer in the layer mask
+            downward. Layer mask defaults to all layers. Null is returned if no objects of the specified type are found, or if there are no objects at the
+            location.
+            </summary>
+            <typeparam name="ObjectType">Type of objects to return.</typeparam>
+            <param name="x">X-value of the position to get object for.</param>
+            <param name="y">Y-value of the position to get object for.</param>
+            <param name="layerMask">Layer mask for which layers can return an object.  Defaults to all layers.</param>
+            <returns>The first object encountered, moving from the highest existing layer in the layer mask downward, or null if there are no objects of the specified
+            type are found.</returns>
+        </member>
+        <member name="M:GoRogue.GameFramework.Map.GetObjects(GoRogue.Coord,System.UInt32)">
             <summary>
             Gets all objects encountered at the given position, in order from the highest existing layer in the layer mask downward.  Layer mask defaults to all layers.
             </summary>
@@ -2295,7 +2338,18 @@
             <param name="layerMask">Layer mask for which layers can return an object.  Defaults to all layers.</param>
             <returns>All objects encountered at the given position, in order from the highest existing layer in the mask downward.</returns>
         </member>
-        <member name="M:GoRogue.GameFramework.Map`1.GetObjects(System.Int32,System.Int32,System.UInt32)">
+        <member name="M:GoRogue.GameFramework.Map.GetObjects``1(GoRogue.Coord,System.UInt32)">
+            <summary>
+            Gets all objects encountered at the given position that are castable to type ObjectType, in order from the highest existing layer in the layer mask downward.
+            Layer mask defaults to all layers.
+            </summary>
+            <typeparam name="ObjectType">Type of objects to return.</typeparam>
+            <param name="position">Position to get objects for.</param>
+            <param name="layerMask">Layer mask for which layers can return an object.  Defaults to all layers.</param>
+            <returns>All objects encountered at the given position that are castable to the given type, in order from the highest existing layer
+            in the mask downward.</returns>
+        </member>
+        <member name="M:GoRogue.GameFramework.Map.GetObjects(System.Int32,System.Int32,System.UInt32)">
             <summary>
             Gets all objects encountered at the given position, in order from the highest existing layer in the layer mask downward.  Layer mask defaults to all layers.
             </summary>
@@ -2304,7 +2358,19 @@
             <param name="layerMask">Layer mask for which layers can return an object.  Defaults to all layers.</param>
             <returns>All objects encountered at the given position, in order from the highest existing layer in the mask downward.</returns>
         </member>
-        <member name="M:GoRogue.GameFramework.Map`1.CalculateFOV(GoRogue.Coord,System.Double)">
+        <member name="M:GoRogue.GameFramework.Map.GetObjects``1(System.Int32,System.Int32,System.UInt32)">
+            <summary>
+            Gets all objects encountered at the given position that are castable to type ObjectType, in order from the highest existing layer in the layer mask downward.
+            Layer mask defaults to all layers.
+            </summary>
+            <typeparam name="ObjectType">Type of objects to return.</typeparam>
+            <param name="x">X-value of the position to get objects for.</param>
+            <param name="y">Y-value of the position to get objects for.</param>
+            <param name="layerMask">Layer mask for which layers can return an object.  Defaults to all layers.</param>
+            <returns>All objects encountered at the given position that are castable to the given type, in order from the highest existing layer
+            in the mask downward.</returns>
+        </member>
+        <member name="M:GoRogue.GameFramework.Map.CalculateFOV(GoRogue.Coord,System.Double)">
             <summary>
             Calculates FOV with the given center point and radius (of shape circle), and stores the result in the FOV property.  All tiles that are in the resulting FOV
             are marked as explored.
@@ -2312,7 +2378,7 @@
             <param name="position">The center point of the new FOV to calculate.</param>
             <param name="radius">The radius of the FOV.  Defaults to infinite.</param>
         </member>
-        <member name="M:GoRogue.GameFramework.Map`1.CalculateFOV(System.Int32,System.Int32,System.Double)">
+        <member name="M:GoRogue.GameFramework.Map.CalculateFOV(System.Int32,System.Int32,System.Double)">
             <summary>
             Calculates FOV with the given center point and radius (of shape circle), and stores the result in the FOV property.  All tiles that are in the resulting FOV
             are marked as explored.
@@ -2321,7 +2387,7 @@
             <param name="y">Y-value of the center point for the new FOV to calculate.</param>
             <param name="radius">The radius of the FOV.  Defaults to infinite.</param>
         </member>
-        <member name="M:GoRogue.GameFramework.Map`1.CalculateFOV(GoRogue.Coord,System.Double,GoRogue.Distance)">
+        <member name="M:GoRogue.GameFramework.Map.CalculateFOV(GoRogue.Coord,System.Double,GoRogue.Distance)">
             <summary>
             Calculates FOV with the given center point and radius, and stores the result in the FOV property.  All tiles that are in the resulting FOV
             are marked as explored.
@@ -2330,7 +2396,7 @@
             <param name="radius">The radius of the FOV.  Defaults to infinite.</param>
             <param name="radiusShape">The shape of the FOV to calculate.  Can be specified as either Distance or Radius types (they are implicitly convertible).</param>
         </member>
-        <member name="M:GoRogue.GameFramework.Map`1.CalculateFOV(System.Int32,System.Int32,System.Double,GoRogue.Distance)">
+        <member name="M:GoRogue.GameFramework.Map.CalculateFOV(System.Int32,System.Int32,System.Double,GoRogue.Distance)">
             <summary>
             Calculates FOV with the given center point and radius, and stores the result in the FOV property.  All tiles that are in the resulting FOV
             are marked as explored.
@@ -2340,7 +2406,7 @@
             <param name="radius">The radius of the FOV.  Defaults to infinite.</param>
             <param name="radiusShape">The shape of the FOV to calculate.  Can be specified as either Distance or Radius types (they are implicitly convertible).</param>
         </member>
-        <member name="M:GoRogue.GameFramework.Map`1.CalculateFOV(GoRogue.Coord,System.Double,GoRogue.Distance,System.Double,System.Double)">
+        <member name="M:GoRogue.GameFramework.Map.CalculateFOV(GoRogue.Coord,System.Double,GoRogue.Distance,System.Double,System.Double)">
             <summary>
             Calculates FOV with the given center point and radius, restricted to the given angle and span, and stores the result in the FOV property.  All tiles that
             are in the resulting FOV are marked as explored.
@@ -2352,7 +2418,7 @@
             <param name="span">The angle in degrees specifying the full arc of the FOV cone.  span/2 degrees on either side of the given angle are included
             in the cone.</param>
         </member>
-        <member name="M:GoRogue.GameFramework.Map`1.CalculateFOV(System.Int32,System.Int32,System.Double,GoRogue.Distance,System.Double,System.Double)">
+        <member name="M:GoRogue.GameFramework.Map.CalculateFOV(System.Int32,System.Int32,System.Double,GoRogue.Distance,System.Double,System.Double)">
             <summary>
             Calculates FOV with the given center point and radius, restricted to the given angle and span, and stores the result in the FOV property.  All tiles that
             are in the resulting FOV are marked as explored.

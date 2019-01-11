@@ -1,7 +1,8 @@
-﻿using Console = SadConsole.Console;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
 using XnaRect = Microsoft.Xna.Framework.Rectangle;
+using GoRogue;
+using GoRogue.MapViews;
+using SadConsole;
 
 namespace Test_Game
 {
@@ -9,6 +10,9 @@ namespace Test_Game
 	{
 		public const int SCREEN_WIDTH = 80;
 		public const int SCREEN_HEIGHT = 25;
+
+		public static MyMap CurrentMap { get; private set; }
+		public static Player Player { get; private set; }
 
 		static void Main(string[] args)
 		{
@@ -35,13 +39,15 @@ namespace Test_Game
 		{
 			// Any custom loading and prep. We will use a sample console for now
 
-			Console startingConsole = new Console(SCREEN_WIDTH, SCREEN_HEIGHT);
-			startingConsole.FillWithRandomGarbage();
-			startingConsole.Fill(new XnaRect(3, 3, 27, 5), null, Color.Black, 0, SpriteEffects.None);
-			startingConsole.Print(6, 5, "Hello from SadConsole", ColorAnsi.CyanBright);
+			CurrentMap = MapCreation.DungeonMap(100, 100, new XnaRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT), 20, 4, 15);
+			Coord playerSpawnPoint = CurrentMap.WalkabilityView.RandomPosition(true);
+			Player = new Player(playerSpawnPoint);
+			CurrentMap.AddEntity(Player);
+				
+			CurrentMap.MapConsole.CenterViewportOn(Player.Position);
 
-			// Set our new console as the thing to render and process
-			SadConsole.Global.CurrentScreen = startingConsole;
+			Global.CurrentScreen = CurrentMap.MapConsole;
+			Global.FocusedConsoles.Push(Player.SadConsoleEntity);
 		}
 
 		private static void Update(GameTime time)
