@@ -6,23 +6,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="GoRogue" Version="2.0.0-pre10" />
     <PackageReference Include="MonoGame.Framework.DesktopGL.Core" Version="3.7.0.7" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="OptimizedPriorityQueue" Version="4.2.0" />
+    <PackageReference Include="SadConsole.Standard" Version="8.0.0-pre5" />
     <PackageReference Include="Troschuetz.Random" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\GoRogue_SadConsole\GoRogue_SadConsole.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="GoRogue">
-      <HintPath>..\libs\GoRogue.dll</HintPath>
-    </Reference>
-    <Reference Include="SadConsole">
-      <HintPath>..\libs\SadConsole.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

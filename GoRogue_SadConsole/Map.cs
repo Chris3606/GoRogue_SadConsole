@@ -1,70 +1,85 @@
-﻿using GoRogue;
-using GFramework = GoRogue.GameFramework;
+﻿using System;
+using System.Collections.Generic;
+using GoRogue.GameFramework;
+using GoRogue.MapViews;
+using GoRogue;
+using Console = SadConsole.Console;
+using SadConsole.Components;
 using SadConsole;
-using System;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using XnaRect = Microsoft.Xna.Framework.Rectangle;
 
 namespace GoRogue_SadConsole
 {
-	public class Map : GFramework.Map
+	public class Map : GoRogue.GameFramework.Map
 	{
+
+		private List<Console> _renderers;
+		public IReadOnlyList<Console> Renderers => _renderers.AsReadOnly();
+
+		private MultipleConsoleEntityDrawingComponent _entitySyncer;
+
 		/// <summary>
-		/// Exposes the terrain of the map as a SadConsole console. You may change each existing Cell (or use SadConsole functions that do so), however DO NOT assign
-		/// a new Cell instance directly to the console -- instead, assign new terrain via the SetTerrain function.
+		/// Exposed only to allow you to create consoles that use this as their rendering data.  DO NOT set new cells via this array -- use SetTerrain
+		/// instead.
 		/// </summary>
-		public MapConsole MapConsole => (MapConsole)Terrain;
+		public Cell[] RenderingCellData { get; }
 
-		public Map(MapConsole console, int numberOfLayers, Distance distanceMeasurement, uint layersBlockingWalkability = uint.MaxValue,
-				   uint layersBlockingTransparency = uint.MaxValue, uint entityLayersSupportingMultipleItems = 0)
-			: base(console, numberOfLayers - 1, distanceMeasurement, layersBlockingWalkability, layersBlockingTransparency, entityLayersSupportingMultipleItems)
-		{
-			MapConsole.Map = this; // Has to be here because "this" is not available in the base call
-			ObjectAdded += OnObjectAdded;
-			ObjectMoved += OnEntityMoved; // Only non-terrain can move (IsStatic is set to false on terrain), so this is safe
-			MapConsole.ViewPortChanged += OnViewportChanged;
-		}
-
-		public Map(int width, int height, XnaRect viewport, int numberOfLayers, Distance distanceMeasurement, uint layersBlockingWalkability = uint.MaxValue,
-				   uint layersBlockingTransparency = uint.MaxValue, uint entityLayersSupportingMultipleItems = 0)
-			: this(new MapConsole(width, height, Global.FontDefault, viewport), numberOfLayers, distanceMeasurement, layersBlockingWalkability,
+		public Map(int width, int height, int numberOfEntityLayers, Distance distanceMeasurement, uint layersBlockingWalkability = uint.MaxValue,
+				   uint layersBlockingTransparency = uint.MaxValue, uint entityLayersSupportingMultipleItems = uint.MaxValue)
+			: base(CreateTerrain(width, height), numberOfEntityLayers, distanceMeasurement, layersBlockingWalkability,
 				  layersBlockingTransparency, entityLayersSupportingMultipleItems)
-		{ }
-
-		private void OnEntityMoved(object sender, ItemMovedEventArgs<GFramework.GameObject> e)
 		{
-			SyncEntityVisibility((Entity)e.Item); // Can assume the object is an entity, only non-terrain moves.
+			// Cast it to what we know it really is and store it so we have the reference for later.
+			RenderingCellData = ((ArrayMap<Terrain>)((LambdaSettableTranslationMap<Terrain, IGameObject>)Terrain).BaseMap);
+
+			// Initialize basic components
+			_renderers = new List<Console>();
+			_entitySyncer = new MultipleConsoleEntityDrawingComponent();
+
+
+			// Sync existing renderers when things are added
+			ObjectAdded += GRMap_ObjectAdded;
+			ObjectRemoved += GRMap_ObjectRemoved;
 		}
 
-		private void OnObjectAdded(object sender, ItemEventArgs<GFramework.GameObject> e)
+		
+
+		private void GRMap_ObjectAdded(object sender, ItemEventArgs<IGameObject> e)
 		{
-			if (e.Item.Layer == 0 && !(e.Item is Terrain))
-				throw new InvalidOperationException($"Cannot add terrain objects of any type of other than {nameof(Terrain)} to {nameof(GoRogue_SadConsole)}.{nameof(Map)}");
-
-			if (e.Item.Layer != 0 && !(e.Item is Entity))
-				throw new InvalidOperationException($"Cannot add non-terrain objects of any type of other than {nameof(Entity)} to {nameof(GoRogue_SadConsole)}.{nameof(Map)}");
-
-			if (e.Item.Layer == 0)
-				MapConsole.IsDirty = true;
-			else // Is entity, so sync it
-				SyncEntityVisibility((Entity)e.Item);
-
-		}
-
-		private void OnViewportChanged(object s, EventArgs e)
-		{
-			foreach (var entity in Entities.Items.Cast<Entity>()) // These can all move
+			if (e.Item is Entity entity)
+				_entitySyncer.Entities.Add(entity);
+			else if (e.Item.Layer == 0)
 			{
-				entity.SadConsoleEntity.PositionOffset = new Microsoft.Xna.Framework.Point(-MapConsole.ViewPort.Location.X, -MapConsole.ViewPort.Location.Y);
-				SyncEntityVisibility(entity);
+				foreach (var renderer in _renderers)
+					renderer.IsDirty = true;
 			}
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private void SyncEntityVisibility(Entity entity)
+		private void GRMap_ObjectRemoved(object sender, ItemEventArgs<IGameObject> e)
 		{
-			entity.SadConsoleEntity.IsVisible = MapConsole.ViewPort.Contains(entity.SadConsoleEntity.Position);
+			if (e.Item is Entity entity)
+				_entitySyncer.Entities.Remove(entity);
+		}
+
+		/// <summary>
+		/// Configures the given console to render the current map and its entities.  THe renderer MUST be using this map's cell data
+		/// to back it.
+		/// </summary>
+		/// <param name="renderer">Render to configure.  Renderer MUST have its cells data be this Map's RenderingCellData.</param>
+		public void ConfigureAsRenderer(Console renderer) // TODO: See about SetSurface to deal with parenting
+		{
+			if (renderer.Cells != RenderingCellData)
+				throw new ArgumentException($"Cannot set a console to render a map that doesn't have the map's {nameof(RenderingCellData)} backing it.");
+
+			_renderers.Add(renderer);
+			renderer.Components.Add(_entitySyncer);
+			renderer.IsDirty = true; // Make sure we re-render - SadConsole bug doesn't set this when constructed
+		}
+
+		// Create new map, and return as something GoRogue understands
+		private static ISettableMapView<IGameObject> CreateTerrain(int width, int height)
+		{
+			var actualTerrain = new ArrayMap<Terrain>(width, height);
+			return new LambdaSettableTranslationMap<Terrain, IGameObject>(actualTerrain, t => t, g => (Terrain)g);
 		}
 	}
 }

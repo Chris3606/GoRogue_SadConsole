@@ -1,65 +1,58 @@
 ﻿using GoRogue;
-using GoRogue.GameFramework;
+using GoRogue_SadConsole;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
+using Keys = Microsoft.Xna.Framework.Input.Keys;
+using SadConsole.Input;
 using SadConsole;
 
 namespace Test_Game
 {
-	class Player : MyEntity
+	class Player : Entity
 	{
-		public Player(Coord position) : base(GetAnimation(), position, MyMap.Layer.MONSTERS, false, true)
+		public Player(Coord position)
+			: base('@', Color.White, position, 1, false, true)
 		{
-			Moved += OnPlayerMoved;
+			UseKeyboard = true;
 
-			SadConsoleEntity.UseKeyboard = true;
-			SadConsoleEntity.KeyboardHandler += MapKeyboardHandler;
+			Moved += Player_Moved;
 		}
 
-		private void OnPlayerMoved(object sender, ItemMovedEventArgs<GameObject> e)
+		// Handle viewport sync
+		private void Player_Moved(object sender, ItemMovedEventArgs<GoRogue.GameFramework.IGameObject> e)
 		{
-			if (CurrentMap != null)
-				CurrentMap.MapConsole.CenterViewportOn(Position);
+			if (CurrentMap == TestGame.CurrentMap)
+				TestGame.MapConsole.CenterViewPortOnPoint(Position);
 		}
 
-		private bool MapKeyboardHandler(Console con, SadConsole.Input.Keyboard keyboard)
+		public override bool ProcessKeyboard(Keyboard info)
 		{
 			Direction dirToMove = Direction.NONE;
 
-			if (keyboard.IsKeyPressed(Keys.NumPad8))
+			if (info.IsKeyPressed(Keys.NumPad8))
 				dirToMove = Direction.UP;
-			else if (keyboard.IsKeyPressed(Keys.NumPad9))
+			else if (info.IsKeyPressed(Keys.NumPad9))
 				dirToMove = Direction.UP_RIGHT;
-			else if (keyboard.IsKeyPressed(Keys.NumPad6))
+			else if (info.IsKeyPressed(Keys.NumPad6))
 				dirToMove = Direction.RIGHT;
-			else if (keyboard.IsKeyPressed(Keys.NumPad3))
+			else if (info.IsKeyPressed(Keys.NumPad3))
 				dirToMove = Direction.DOWN_RIGHT;
-			else if (keyboard.IsKeyPressed(Keys.NumPad2))
+			else if (info.IsKeyPressed(Keys.NumPad2))
 				dirToMove = Direction.DOWN;
-			else if (keyboard.IsKeyPressed(Keys.NumPad1))
+			else if (info.IsKeyPressed(Keys.NumPad1))
 				dirToMove = Direction.DOWN_LEFT;
-			else if (keyboard.IsKeyPressed(Keys.NumPad4))
+			else if (info.IsKeyPressed(Keys.NumPad4))
 				dirToMove = Direction.LEFT;
-			else if (keyboard.IsKeyPressed(Keys.NumPad9))
+			else if (info.IsKeyPressed(Keys.NumPad7))
 				dirToMove = Direction.UP_LEFT;
+
 
 			if (dirToMove != Direction.NONE)
 			{
-				Program.Player.MoveIn(dirToMove);
+				MoveIn(dirToMove);
 				return true;
 			}
 
 			return false;
-		}
-
-		private static AnimatedConsole GetAnimation()
-		{
-			var anim = new AnimatedConsole("player", 1, 1);
-			anim.CreateFrame();
-			anim.CurrentFrame.SetGlyph(0, 0, '@');
-			anim.CurrentFrame.SetForeground(0, 0, Color.Red);
-
-			return anim;
 		}
 	}
 }
