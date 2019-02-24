@@ -10,7 +10,7 @@ namespace Test_Game
 	class Player : Entity
 	{
 		public Player(Coord position)
-			: base('@', Color.White, position, 1, false, true)
+			: base('@', Color.White, position, 2, false, true)
 		{
 			UseKeyboard = true;
 

@@ -15,7 +15,10 @@ namespace GoRogue_SadConsole
 		private List<Console> _renderers;
 		public IReadOnlyList<Console> Renderers => _renderers.AsReadOnly();
 
-		private MultipleConsoleEntityDrawingComponent _entitySyncer;
+		// One of these per layer, so we force the rendering order to be what we want
+		// (high layers appearing on top of low layers).  They're added to consoles in order of
+		// this array, first to last, which controls the render order.
+		private MultipleConsoleEntityDrawingComponent[] _entitySyncersByLayer;
 
 		/// <summary>
 		/// Exposed only to allow you to create consoles that use this as their rendering data.  DO NOT set new cells via this array -- use SetTerrain
@@ -33,7 +36,9 @@ namespace GoRogue_SadConsole
 
 			// Initialize basic components
 			_renderers = new List<Console>();
-			_entitySyncer = new MultipleConsoleEntityDrawingComponent();
+			_entitySyncersByLayer = new MultipleConsoleEntityDrawingComponent[numberOfEntityLayers];
+			for (int i = 0; i < _entitySyncersByLayer.Length; i++)
+			_entitySyncersByLayer[i] = new MultipleConsoleEntityDrawingComponent();
 
 
 			// Sync existing renderers when things are added
@@ -46,7 +51,7 @@ namespace GoRogue_SadConsole
 		private void GRMap_ObjectAdded(object sender, ItemEventArgs<IGameObject> e)
 		{
 			if (e.Item is Entity entity)
-				_entitySyncer.Entities.Add(entity);
+				_entitySyncersByLayer[entity.Layer - 1].Entities.Add(entity);
 			else if (e.Item.Layer == 0)
 			{
 				foreach (var renderer in _renderers)
@@ -57,7 +62,7 @@ namespace GoRogue_SadConsole
 		private void GRMap_ObjectRemoved(object sender, ItemEventArgs<IGameObject> e)
 		{
 			if (e.Item is Entity entity)
-				_entitySyncer.Entities.Remove(entity);
+				_entitySyncersByLayer[entity.Layer - 1].Entities.Remove(entity);
 		}
 
 		/// <summary>
@@ -71,7 +76,8 @@ namespace GoRogue_SadConsole
 				throw new ArgumentException($"Cannot set a console to render a map that doesn't have the map's {nameof(RenderingCellData)} backing it.");
 
 			_renderers.Add(renderer);
-			renderer.Components.Add(_entitySyncer);
+			foreach (var syncer in _entitySyncersByLayer)
+				renderer.Components.Add(syncer);
 			renderer.IsDirty = true; // Make sure we re-render - SadConsole bug doesn't set this when constructed
 		}
 

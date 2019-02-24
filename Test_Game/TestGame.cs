@@ -1,6 +1,9 @@
 ﻿using GoRogue;
+using GoRogue_SadConsole;
 using GoRogue.MapViews;
+using Microsoft.Xna.Framework;
 using SadConsole;
+using XnaRect = Microsoft.Xna.Framework.Rectangle;
 
 namespace Test_Game
 {
@@ -36,13 +39,19 @@ namespace Test_Game
 			// Generate map
 			CurrentMap = TestGameMap.CreateDungeonMap(100, 100);
 
+			// Entity to test layering
+			var testItem = new Entity('i', Color.White, (2, 2), 1, true, true);
+			CurrentMap.AddEntity(testItem);
 
 			Player = new Player(CurrentMap.WalkabilityView.RandomPosition(true));
 			CurrentMap.AddEntity(Player);
 
+			
+
+
 			MapConsole = new ScrollingConsole(width: CurrentMap.Width, height: CurrentMap.Height,
 											  font: SadConsole.Global.FontDefault,
-											   viewPort: new Rectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT),
+											   viewPort: new XnaRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT),
 											   initialCells: CurrentMap.RenderingCellData);
 			MapConsole.CenterViewPortOnPoint(Player.Position);
 
