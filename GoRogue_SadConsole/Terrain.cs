@@ -4,6 +4,7 @@ using SadConsole;
 using GoRogue;
 using GoRogue.GameFramework;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace GoRogue_SadConsole
 {
@@ -11,9 +12,39 @@ namespace GoRogue_SadConsole
 	{
 		private IGameObject _backingField;
 
-		// TODO: Other Cell constructor lookalikes
-		public Terrain(int glyph, Color foreground, Coord position, bool isWalkable, bool isTransparent)
-			: base(foreground, Color.Transparent, glyph)
+		#region Constructors
+		public Terrain(Coord position, bool isWalkable, bool isTransparent)
+			: base()
+		{
+			InitializeBackingField(position, isWalkable, isTransparent);
+		}
+
+		public Terrain(Color foreground, Coord position, bool isWalkable, bool isTransparent)
+			: base(foreground)
+		{
+			InitializeBackingField(position, isWalkable, isTransparent);
+		}
+
+		public Terrain(Color foreground, Color background, Coord position, bool isWalkable, bool isTransparent)
+			: base(foreground, background)
+		{
+			InitializeBackingField(position, isWalkable, isTransparent);
+		}
+
+		public Terrain(Color foreground, Color background, int glyph, Coord position, bool isWalkable, bool isTransparent)
+			: base(foreground, background, glyph)
+		{
+			InitializeBackingField(position, isWalkable, isTransparent);
+		}
+
+		public Terrain(Color foreground, Color background, int glyph, SpriteEffects mirror, Coord position, bool isWalkable, bool isTransparent)
+			: base(foreground, background, glyph, mirror)
+		{
+			InitializeBackingField(position, isWalkable, isTransparent);
+		}
+		#endregion
+
+		public void InitializeBackingField(Coord position, bool isWalkable, bool isTransparent)
 		{
 			_backingField = new GameObject(position, 0, this, true, isWalkable, isTransparent);
 		}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using GoRogue;
 using GoRogue.GameFramework;
 using Microsoft.Xna.Framework;
+using SadConsole;
 
 namespace GoRogue_SadConsole
 {
@@ -11,9 +12,34 @@ namespace GoRogue_SadConsole
 	{
 		private IGameObject _backingField;
 
-		// TODO: Other SadConsole.Entity constructor lookalikes
-		public Entity(int glyph, Color foreground, Coord position, int layer, bool isWalkable, bool isTransparent)
-			: base(foreground, Color.Transparent, glyph)
+		#region Constructors
+		public Entity(Color foreground, Color background, int glyph, Coord position, int layer, bool isWalkable, bool isTransparent)
+			: base(foreground, background, glyph)
+		{
+			Initialize(position, layer, isWalkable, isTransparent);
+		}
+
+		public Entity(int width, int height, Coord position, int layer, bool isWalkable, bool isTransparent)
+			: base(width, height)
+		{
+			Initialize(position, layer, isWalkable, isTransparent);
+		}
+
+		public Entity(int width, int height, Font font, Coord position, int layer, bool isWalkable, bool isTransparent)
+			: base(width, height, font)
+		{
+			Initialize(position, layer, isWalkable, isTransparent);
+		}
+
+		public Entity(AnimatedConsole animation, Coord position, int layer, bool isWalkable, bool isTransparent)
+			: base(animation)
+		{
+			Initialize(position, layer, isWalkable, isTransparent);
+		}
+		#endregion
+
+
+		private void Initialize(Coord position, int layer, bool isWalkable, bool isTransparent)
 		{
 			_backingField = new GameObject(position, layer, this, false, isWalkable, isTransparent);
 			base.Position = _backingField.Position;

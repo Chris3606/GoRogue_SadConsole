@@ -40,14 +40,11 @@ namespace Test_Game
 			CurrentMap = TestGameMap.CreateDungeonMap(100, 100);
 
 			// Entity to test layering
-			var testItem = new Entity('i', Color.White, (2, 2), 1, true, true);
+			var testItem = new Entity(Color.White, Color.Transparent, 'i', (2, 2), 1, true, true);
 			CurrentMap.AddEntity(testItem);
 
 			Player = new Player(CurrentMap.WalkabilityView.RandomPosition(true));
 			CurrentMap.AddEntity(Player);
-
-			
-
 
 			MapConsole = new ScrollingConsole(width: CurrentMap.Width, height: CurrentMap.Height,
 											  font: SadConsole.Global.FontDefault,
