@@ -1,13 +1,13 @@
 ﻿using GoRogue;
 using GoRogue_SadConsole;
 using Microsoft.Xna.Framework;
-using Keys = Microsoft.Xna.Framework.Input.Keys;
-using SadConsole.Input;
 using SadConsole;
+using SadConsole.Input;
+using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 namespace Test_Game
 {
-	class Player : Entity
+	internal class Player : Entity
 	{
 		public Player(Coord position)
 			: base(Color.White, Color.Transparent, '@', position, 2, false, true)
@@ -15,13 +15,6 @@ namespace Test_Game
 			UseKeyboard = true;
 
 			Moved += Player_Moved;
-		}
-
-		// Handle viewport sync
-		private void Player_Moved(object sender, ItemMovedEventArgs<GoRogue.GameFramework.IGameObject> e)
-		{
-			if (CurrentMap == TestGame.CurrentMap)
-				TestGame.MapConsole.CenterViewPortOnPoint(Position);
 		}
 
 		public override bool ProcessKeyboard(Keyboard info)
@@ -45,7 +38,6 @@ namespace Test_Game
 			else if (info.IsKeyPressed(Keys.NumPad7))
 				dirToMove = Direction.UP_LEFT;
 
-
 			if (dirToMove != Direction.NONE)
 			{
 				MoveIn(dirToMove);
@@ -53,6 +45,13 @@ namespace Test_Game
 			}
 
 			return false;
+		}
+
+		// Handle viewport sync
+		private void Player_Moved(object sender, ItemMovedEventArgs<GoRogue.GameFramework.IGameObject> e)
+		{
+			if (CurrentMap == TestGame.CurrentMap)
+				TestGame.MapConsole.CenterViewPortOnPoint(Position);
 		}
 	}
 }

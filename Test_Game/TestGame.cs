@@ -1,17 +1,15 @@
-﻿using GoRogue;
+﻿using GoRogue.MapViews;
 using GoRogue_SadConsole;
-using GoRogue.MapViews;
 using Microsoft.Xna.Framework;
 using SadConsole;
 using XnaRect = Microsoft.Xna.Framework.Rectangle;
 
 namespace Test_Game
 {
-	class TestGame
+	internal class TestGame
 	{
-		public const int SCREEN_WIDTH = 80;
 		public const int SCREEN_HEIGHT = 25;
-
+		public const int SCREEN_WIDTH = 80;
 		public static TestGameMap CurrentMap { get; private set; }
 		public static ScrollingConsole MapConsole { get; private set; }
 		public static Player Player { get; private set; }
@@ -27,9 +25,7 @@ namespace Test_Game
 			// Start the game.
 			SadConsole.Game.Instance.Run();
 
-			//
 			// Code here will not run until the game window closes.
-			//
 
 			SadConsole.Game.Instance.Dispose();
 		}

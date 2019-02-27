@@ -6,9 +6,10 @@ using System;
 
 namespace Test_Game
 {
-	enum MapLayers { TERRAIN = 0, ITEMS, MONSTERS }
+	internal enum MapLayers
+	{ TERRAIN = 0, ITEMS, MONSTERS }
 
-	class TestGameMap : Map
+	internal class TestGameMap : Map
 	{
 		public TestGameMap(int width, int height)
 			: base(width, height,

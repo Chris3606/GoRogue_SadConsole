@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using SadConsole;
-using GoRogue;
+﻿using GoRogue;
 using GoRogue.GameFramework;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SadConsole;
+using System;
+using System.Collections.Generic;
 
 namespace GoRogue_SadConsole
 {
@@ -13,6 +13,7 @@ namespace GoRogue_SadConsole
 		private IGameObject _backingField;
 
 		#region Constructors
+
 		public Terrain(Coord position, bool isWalkable, bool isTransparent)
 			: base()
 		{
@@ -42,7 +43,8 @@ namespace GoRogue_SadConsole
 		{
 			InitializeBackingField(position, isWalkable, isTransparent);
 		}
-		#endregion
+
+		#endregion Constructors
 
 		public void InitializeBackingField(Coord position, bool isWalkable, bool isTransparent)
 		{
@@ -50,18 +52,6 @@ namespace GoRogue_SadConsole
 		}
 
 		#region IGameObject Implementation
-		GoRogue.GameFramework.Map IGameObject.CurrentMap => _backingField.CurrentMap;
-		public Map CurrentMap => (Map)_backingField.CurrentMap;
-
-		public bool IsStatic => _backingField.IsStatic;
-
-		public bool IsTransparent { get => _backingField.IsTransparent; set => _backingField.IsTransparent = value; }
-		public bool IsWalkable { get => _backingField.IsWalkable; set => _backingField.IsWalkable = value; }
-		public Coord Position { get => _backingField.Position; set => _backingField.Position = value; }
-
-		public uint ID => _backingField.ID;
-
-		public int Layer => _backingField.Layer;
 
 		public event EventHandler<ItemMovedEventArgs<IGameObject>> Moved
 		{
@@ -69,20 +59,28 @@ namespace GoRogue_SadConsole
 			remove => _backingField.Moved -= value;
 		}
 
+		GoRogue.GameFramework.Map IGameObject.CurrentMap => _backingField.CurrentMap;
+		public Map CurrentMap => (Map)_backingField.CurrentMap;
+
+		public uint ID => _backingField.ID;
+		public bool IsStatic => _backingField.IsStatic;
+
+		public bool IsTransparent { get => _backingField.IsTransparent; set => _backingField.IsTransparent = value; }
+		public bool IsWalkable { get => _backingField.IsWalkable; set => _backingField.IsWalkable = value; }
+		public int Layer => _backingField.Layer;
+		public Coord Position { get => _backingField.Position; set => _backingField.Position = value; }
+
 		public void AddComponent(object component) => _backingField.AddComponent(component);
 
 		public T GetComponent<T>() => _backingField.GetComponent<T>();
 
 		public IEnumerable<T> GetComponents<T>() => _backingField.GetComponents<T>();
 
-
 		public bool HasComponent(Type componentType) => _backingField.HasComponent(componentType);
 
 		public bool HasComponent<T>() => _backingField.HasComponent<T>();
 
-
 		public bool HasComponents(params Type[] componentTypes) => _backingField.HasComponents(componentTypes);
-
 
 		public bool MoveIn(Direction direction) => _backingField.MoveIn(direction);
 
@@ -91,6 +89,7 @@ namespace GoRogue_SadConsole
 		public void RemoveComponent(object component) => _backingField.RemoveComponent(component);
 
 		public void RemoveComponents(params object[] components) => _backingField.RemoveComponents(components);
-		#endregion
+
+		#endregion IGameObject Implementation
 	}
 }
