@@ -7,7 +7,7 @@
   <ItemGroup>
     <PackageReference Include="GoRogue" Version="2.0.0-pre10" />
     <PackageReference Include="MonoGame.Framework.DesktopGL.Core" Version="3.7.0.7" />
-    <PackageReference Include="SadConsole.Standard" Version="8.0.0" />
+    <PackageReference Include="SadConsole" Version="8.1.0" />
   </ItemGroup>
 
 </Project>
